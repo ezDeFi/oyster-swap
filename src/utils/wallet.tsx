@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import Wallet from "@project-serum/sol-wallet-adapter";
+import EzWallet from "@ezdefi/ezdefi-solala-wallet-adapter";
 import { notify } from "./notifications";
 import { useConnectionConfig } from "./connection";
 import { useLocalStorageState } from "./utils";
@@ -10,7 +11,14 @@ export const WALLET_PROVIDERS = [
   { name: "solongwallet.com", url: "http://solongwallet.com" },
   { name: "solflare.com", url: "https://solflare.com/access-wallet" },
   { name: "mathwallet.org", url: "https://www.mathwallet.org" },
+  { name: "ezDeFi", url: "https://www.ezdefi.com" },
 ];
+
+declare global {
+  interface Window {
+    solana:any;
+  }
+}
 
 const WalletContext = React.createContext<any>(null);
 
@@ -20,14 +28,21 @@ export function WalletProvider({ children = null as any }) {
     "walletProvider",
     "https://www.sollet.io"
   );
+
+  //ezdefi provider configs
+  const network = 'mainnet'
+  const injectedPath = [window.solana,...Object.values(window.solana||{})].find((w: any) => {return w.name === 'ezdefi'})
+
   const wallet = useMemo(() => {
     console.log("use new provider:", providerUrl, " endpoint:", endpoint);
-    if (providerUrl === "http://solongwallet.com") {
+    if (providerUrl === 'https://www.ezdefi.com') {
+      return new EzWallet(providerUrl, network, injectedPath)
+    } else if (providerUrl === "http://solongwallet.com") {
       return new SolongAdapter(providerUrl, endpoint);
     } else {
       return new Wallet(providerUrl, endpoint);
     }
-  }, [providerUrl, endpoint]);
+  }, [providerUrl, endpoint, network, injectedPath]);
 
   const [connected, setConnected] = useState(false);
   useEffect(() => {
