@@ -7,11 +7,11 @@ import { useLocalStorageState } from "./utils";
 import { SolongAdapter } from "./solong_adapter";
 
 export const WALLET_PROVIDERS = [
+  { name: "ezDeFi", url: "https://www.ezdefi.com" },
   { name: "sollet.io", url: "https://www.sollet.io" },
   { name: "solongwallet.com", url: "http://solongwallet.com" },
   { name: "solflare.com", url: "https://solflare.com/access-wallet" },
   { name: "mathwallet.org", url: "https://www.mathwallet.org" },
-  { name: "ezDeFi", url: "https://www.ezdefi.com" },
 ];
 
 declare global {
@@ -26,7 +26,7 @@ export function WalletProvider({ children = null as any }) {
   const { endpoint } = useConnectionConfig();
   const [providerUrl, setProviderUrl] = useLocalStorageState(
     "walletProvider",
-    "https://www.sollet.io"
+    "https://www.ezdefi.com"
   );
 
   //ezdefi provider configs
