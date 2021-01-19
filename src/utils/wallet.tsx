@@ -31,11 +31,18 @@ export function WalletProvider({ children = null as any }) {
 
   //ezdefi provider configs
   const network = 'mainnet'
-  const injectedPath = [window.solana,...Object.values(window.solana||{})].find((w: any) => {return w.name === 'ezdefi'})
+  const injectedPath = window.solana ? [window.solana,...Object.values(window.solana||{})].find((w: any) => {return w.name === 'ezdefi'}) : null
 
   const wallet = useMemo(() => {
     console.log("use new provider:", providerUrl, " endpoint:", endpoint);
     if (providerUrl === 'https://www.ezdefi.com') {
+      if (!injectedPath) {
+        notify({
+          message: 'ezDeFi wallet is not installed.',
+          description: '',
+        });
+        return new Wallet('https://www.sollet.io', endpoint);
+      }
       return new EzWallet(providerUrl, network, injectedPath)
     } else if (providerUrl === "http://solongwallet.com") {
       return new SolongAdapter(providerUrl, endpoint);
