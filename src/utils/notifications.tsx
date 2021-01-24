@@ -5,6 +5,7 @@ import { notification } from "antd";
 export function notify({
   message = "",
   description = undefined as any,
+  isInstalled = true,
   txid = "",
   type = "info",
   placement = "bottomLeft",
@@ -19,6 +20,17 @@ export function notify({
     //   </Link>
 
     description = <></>;
+  }
+  if (!isInstalled) {
+    description = (
+      <a
+        href={'https://ezdefi.com/download'}
+        style={{ color: '#0000ff' }}
+        target="_blank"
+      >
+        Click to install ezDeFi wallet
+      </a>
+    );
   }
   (notification as any)[type]({
     message: <span style={{ color: "black" }}>{message}</span>,

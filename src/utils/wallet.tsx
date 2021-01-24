@@ -39,9 +39,9 @@ export function WalletProvider({ children = null as any }) {
       if (!injectedPath) {
         notify({
           message: 'ezDeFi wallet is not installed.',
-          description: '',
+          isInstalled: false,
         });
-        return new Wallet('https://www.sollet.io', endpoint);
+        return new Wallet('https://ezdefi.com/download', endpoint);
       }
       return new EzWallet(providerUrl, network, injectedPath)
     } else if (providerUrl === "http://solongwallet.com") {
